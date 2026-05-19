@@ -23,8 +23,8 @@ export const errorMiddleware = (
 ): void => {
   // Zod validation errors
   if (err instanceof ZodError) {
-    const message = err.errors
-      .map((e) => `${e.path.join(".")}: ${e.message}`)
+    const message = err.issues
+      .map((issue) => `${String(issue.path.join("."))}: ${issue.message}`)
       .join(", ");
     ResponseHandler.badRequest(res, "Validation failed", message);
     return;

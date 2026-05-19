@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodSchema } from "zod";
+import { ZodSchema, ZodError } from "zod";
 import { ResponseHandler } from "../utils/response";
 
 export const validate = (schema: ZodSchema) => {
@@ -8,7 +8,8 @@ export const validate = (schema: ZodSchema) => {
       const result = schema.safeParse(req.body);
 
       if (!result.success) {
-        const message = result.error.errors
+        const zodError = result.error as ZodError;
+        const message = zodError.issues
           .map((e) => `${e.path.join(".")}: ${e.message}`)
           .join(", ");
         ResponseHandler.badRequest(res, "Validation failed", message);

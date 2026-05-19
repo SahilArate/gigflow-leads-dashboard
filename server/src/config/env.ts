@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+console.log("📁 Loading .env from:", path.resolve(process.cwd(), ".env"));
+console.log("🔗 URI preview:", process.env.MONGODB_URI?.substring(0, 50));
 
 const requiredEnvVars = [
   "MONGODB_URI",

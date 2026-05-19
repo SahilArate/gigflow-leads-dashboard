@@ -1,35 +1,32 @@
 import mongoose from "mongoose";
 import { env } from "./env";
 
-const RETRY_DELAY = 5000;
-const MAX_RETRIES = 3;
-
-const connectWithRetry = async (retries = MAX_RETRIES): Promise<void> => {
-  try {
-    await mongoose.connect(env.mongoUri, {
-      serverSelectionTimeoutMS: 5000,
-    });
-    console.log("✅ MongoDB connected successfully");
-  } catch (error) {
-    if (retries === 0) {
-      console.error("❌ MongoDB connection failed after max retries");
-      process.exit(1);
-    }
-    console.warn(`⚠️  MongoDB connection failed. Retrying in ${RETRY_DELAY / 1000}s... (${retries} retries left)`);
-    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
-    return connectWithRetry(retries - 1);
-  }
-};
+let isConnected = false;
 
 export const connectDB = async (): Promise<void> => {
-  mongoose.connection.on("disconnected", () => {
-    console.warn("⚠️  MongoDB disconnected. Attempting reconnect...");
-    connectWithRetry();
-  });
+  if (isConnected) return;
 
-  mongoose.connection.on("error", (err) => {
-    console.error("❌ MongoDB error:", err.message);
-  });
+  try {
+    const conn = await mongoose.connect(env.mongoUri, {
+      serverSelectionTimeoutMS: 10000,
+    });
 
-  await connectWithRetry();
+    isConnected = true;
+    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+
+    mongoose.connection.on("disconnected", () => {
+      console.warn("⚠️  MongoDB disconnected");
+      isConnected = false;
+    });
+
+    mongoose.connection.on("error", (err) => {
+      console.error("❌ MongoDB error:", err.message);
+      isConnected = false;
+    });
+
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:", (error as Error).message);
+    console.error("Please check your MONGODB_URI in .env file");
+    process.exit(1);
+  }
 };
