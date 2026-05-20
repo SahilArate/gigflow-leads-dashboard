@@ -2,6 +2,7 @@ import { Lead } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { getStatusColor, getSourceColor, getInitials, formatDate } from "@/lib/utils";
 import { Mail, Calendar, Tag, Globe, FileText } from "lucide-react";
+import { AILeadAnalysis } from "@/components/ai/AILeadAnalysis";
 
 interface LeadDetailProps {
   lead: Lead;

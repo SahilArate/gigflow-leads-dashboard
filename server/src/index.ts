@@ -4,7 +4,7 @@ import { connectDB } from "./config/db";
 import { env } from "./config/env";
 import { errorMiddleware } from "./middleware";
 import authRoutes from "./modules/auth/auth.routes";
-import leadsRoutes from "./modules/leads/leads.routes";
+import aiRoutes from "./modules/ai/ai.routes";
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.get("/health", (_req, res) => {
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
-app.use("/api/leads", leadsRoutes);
+app.use("/api/ai", aiRoutes);
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((_req, res) => {
   res.status(404).json({

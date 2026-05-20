@@ -15,6 +15,7 @@ import { Pagination } from "@/components/leads/Pagination";
 import { Modal } from "@/components/ui/Modal";
 import { LeadForm } from "@/components/leads/LeadForm";
 import { Button } from "@/components/ui/Button";
+import { AIInsightCard } from "@/components/ai/AIInsightCard";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -91,6 +92,9 @@ export default function DashboardPage() {
 
         {/* Stats */}
         <StatsCards stats={stats} isLoading={statsLoading} />
+
+        {/* AI Insights */}
+        <AIInsightCard />
 
         {/* Filters */}
         <FilterBar
