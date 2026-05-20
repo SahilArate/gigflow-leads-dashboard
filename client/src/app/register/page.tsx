@@ -6,11 +6,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Zap } from "lucide-react";
+import { Eye, EyeOff, Zap, ArrowRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -45,90 +42,166 @@ export default function RegisterPage() {
     }
   };
 
+  const inputStyle = (hasError: boolean) => ({
+    width: "100%",
+    backgroundColor: "#111111",
+    border: `1px solid ${hasError ? "#ef4444" : "#333333"}`,
+    borderRadius: "8px",
+    padding: "10px 14px",
+    fontSize: "14px",
+    color: "#ffffff",
+    outline: "none",
+    boxSizing: "border-box" as const,
+  });
+
+  const labelStyle = {
+    display: "block",
+    fontSize: "13px",
+    fontWeight: "500" as const,
+    color: "#aaaaaa",
+    marginBottom: "8px",
+  };
+
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div style={{
+      minHeight: "100vh",
+      backgroundColor: "#000000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
+      fontFamily: "system-ui, sans-serif",
+    }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
 
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <Zap className="w-5 h-5 text-black" />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "40px" }}>
+          <div style={{
+            width: "36px", height: "36px",
+            backgroundColor: "#ffffff",
+            borderRadius: "10px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Zap size={20} color="#000000" />
           </div>
-          <span className="text-xl font-semibold text-white">GigFlow</span>
+          <span style={{ fontSize: "20px", fontWeight: "600", color: "#ffffff" }}>GigFlow</span>
         </div>
 
         {/* Card */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-8">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-white mb-1">Create account</h1>
-            <p className="text-sm text-zinc-500">Start managing your leads pipeline</p>
+        <div style={{
+          backgroundColor: "#0a0a0a",
+          border: "1px solid #222222",
+          borderRadius: "16px",
+          padding: "40px",
+        }}>
+          <div style={{ marginBottom: "32px" }}>
+            <h1 style={{ fontSize: "24px", fontWeight: "600", color: "#ffffff", marginBottom: "6px" }}>
+              Create account
+            </h1>
+            <p style={{ fontSize: "14px", color: "#666666" }}>
+              Start managing your leads pipeline
+            </p>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <p className="text-sm text-red-400">{error}</p>
+            <div style={{
+              marginBottom: "20px",
+              padding: "12px 16px",
+              backgroundColor: "rgba(239,68,68,0.1)",
+              border: "1px solid rgba(239,68,68,0.2)",
+              borderRadius: "8px",
+            }}>
+              <p style={{ fontSize: "13px", color: "#f87171" }}>{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              label="Full Name"
-              placeholder="John Doe"
-              error={errors.name?.message}
-              {...register("name")}
-            />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Name */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={labelStyle}>Full Name</label>
+              <input type="text" placeholder="John Doe" style={inputStyle(!!errors.name)} {...register("name")} />
+              {errors.name && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.name.message}</p>}
+            </div>
 
-            <Input
-              label="Email"
-              type="email"
-              placeholder="you@example.com"
-              error={errors.email?.message}
-              {...register("email")}
-            />
+            {/* Email */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={labelStyle}>Email address</label>
+              <input type="email" placeholder="you@example.com" style={inputStyle(!!errors.email)} {...register("email")} />
+              {errors.email && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.email.message}</p>}
+            </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-300">Password</label>
-              <div className="relative">
+            {/* Password */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={labelStyle}>Password</label>
+              <div style={{ position: "relative" }}>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Min 8 chars, upper, lower, number"
-                  className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-500 rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-zinc-500"
+                  style={{ ...inputStyle(!!errors.password), paddingRight: "42px" }}
                   {...register("password")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+                  style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none", border: "none", cursor: "pointer",
+                    color: "#666666", display: "flex", alignItems: "center",
+                  }}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {errors.password && <p className="text-xs text-red-400">{errors.password.message}</p>}
+              {errors.password && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.password.message}</p>}
             </div>
 
-            <Select
-              label="Role"
-              error={errors.role?.message}
-              options={[
-                { value: "sales", label: "Sales User" },
-                { value: "admin", label: "Admin" },
-              ]}
-              {...register("role")}
-            />
+            {/* Role */}
+            <div style={{ marginBottom: "28px" }}>
+              <label style={labelStyle}>Role</label>
+              <select
+                style={{
+                  ...inputStyle(!!errors.role),
+                  cursor: "pointer",
+                }}
+                {...register("role")}
+              >
+                <option value="sales">Sales User</option>
+                <option value="admin">Admin</option>
+              </select>
+              {errors.role && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.role.message}</p>}
+            </div>
 
-            <Button
+            {/* Submit */}
+            <button
               type="submit"
-              className="w-full"
-              size="lg"
-              isLoading={isSubmitting}
+              disabled={isSubmitting}
+              style={{
+                width: "100%",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                border: "none",
+                borderRadius: "8px",
+                padding: "12px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: isSubmitting ? 0.7 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                boxSizing: "border-box",
+              }}
             >
-              Create account
-            </Button>
+              {isSubmitting ? "Creating account..." : "Create account"}
+              {!isSubmitting && <ArrowRight size={16} />}
+            </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-zinc-500">
+          <p style={{ marginTop: "28px", textAlign: "center", fontSize: "13px", color: "#555555" }}>
             Already have an account?{" "}
-            <Link href="/login" className="text-white hover:underline">
+            <Link href="/login" style={{ color: "#ffffff", textDecoration: "underline" }}>
               Sign in
             </Link>
           </p>
