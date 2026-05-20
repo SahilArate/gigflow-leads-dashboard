@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   margin: 0;
@@ -14,7 +16,6 @@ body {
   background-color: #000000;
   color: #ffffff;
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  antialiased: true;
 }
 
 ::-webkit-scrollbar {

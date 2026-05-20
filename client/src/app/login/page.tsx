@@ -6,10 +6,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Zap } from "lucide-react";
+import { Eye, EyeOff, Zap, ArrowRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -39,78 +37,157 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div style={{
+      minHeight: "100vh",
+      backgroundColor: "#000000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
+      fontFamily: "system-ui, sans-serif",
+    }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
 
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <Zap className="w-5 h-5 text-black" />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "40px" }}>
+          <div style={{
+            width: "36px", height: "36px",
+            backgroundColor: "#ffffff",
+            borderRadius: "10px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Zap size={20} color="#000000" />
           </div>
-          <span className="text-xl font-semibold text-white">GigFlow</span>
+          <span style={{ fontSize: "20px", fontWeight: "600", color: "#ffffff" }}>GigFlow</span>
         </div>
 
         {/* Card */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-8">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-white mb-1">Welcome back</h1>
-            <p className="text-sm text-zinc-500">Sign in to your account to continue</p>
+        <div style={{
+          backgroundColor: "#0a0a0a",
+          border: "1px solid #222222",
+          borderRadius: "16px",
+          padding: "40px",
+        }}>
+          <div style={{ marginBottom: "32px" }}>
+            <h1 style={{ fontSize: "24px", fontWeight: "600", color: "#ffffff", marginBottom: "6px" }}>
+              Welcome back
+            </h1>
+            <p style={{ fontSize: "14px", color: "#666666" }}>
+              Sign in to your GigFlow account
+            </p>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <p className="text-sm text-red-400">{error}</p>
+            <div style={{
+              marginBottom: "20px",
+              padding: "12px 16px",
+              backgroundColor: "rgba(239,68,68,0.1)",
+              border: "1px solid rgba(239,68,68,0.2)",
+              borderRadius: "8px",
+            }}>
+              <p style={{ fontSize: "13px", color: "#f87171" }}>{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              label="Email"
-              type="email"
-              placeholder="you@example.com"
-              error={errors.email?.message}
-              {...register("email")}
-            />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Email */}
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: "500", color: "#aaaaaa", marginBottom: "8px" }}>
+                Email address
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                style={{
+                  width: "100%",
+                  backgroundColor: "#111111",
+                  border: `1px solid ${errors.email ? "#ef4444" : "#333333"}`,
+                  borderRadius: "8px",
+                  padding: "10px 14px",
+                  fontSize: "14px",
+                  color: "#ffffff",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+                {...register("email")}
+              />
+              {errors.email && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.email.message}</p>}
+            </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-300">Password</label>
-              <div className="relative">
+            {/* Password */}
+            <div style={{ marginBottom: "28px" }}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: "500", color: "#aaaaaa", marginBottom: "8px" }}>
+                Password
+              </label>
+              <div style={{ position: "relative" }}>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-500 rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-zinc-500"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#111111",
+                    border: `1px solid ${errors.password ? "#ef4444" : "#333333"}`,
+                    borderRadius: "8px",
+                    padding: "10px 42px 10px 14px",
+                    fontSize: "14px",
+                    color: "#ffffff",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
                   {...register("password")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+                  style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none", border: "none", cursor: "pointer",
+                    color: "#666666", display: "flex", alignItems: "center",
+                  }}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {errors.password && <p className="text-xs text-red-400">{errors.password.message}</p>}
+              {errors.password && <p style={{ fontSize: "12px", color: "#f87171", marginTop: "4px" }}>{errors.password.message}</p>}
             </div>
 
-            <Button
+            {/* Submit */}
+            <button
               type="submit"
-              className="w-full"
-              size="lg"
-              isLoading={isSubmitting}
+              disabled={isSubmitting}
+              style={{
+                width: "100%",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                border: "none",
+                borderRadius: "8px",
+                padding: "12px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: isSubmitting ? 0.7 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                boxSizing: "border-box",
+              }}
             >
-              Sign in
-            </Button>
+              {isSubmitting ? "Signing in..." : "Sign in"}
+              {!isSubmitting && <ArrowRight size={16} />}
+            </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-zinc-500">
+          <p style={{ marginTop: "28px", textAlign: "center", fontSize: "13px", color: "#555555" }}>
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-white hover:underline">
+            <Link href="/register" style={{ color: "#ffffff", textDecoration: "underline" }}>
               Create one
             </Link>
           </p>
         </div>
 
-        <p className="text-center text-xs text-zinc-700 mt-6">
+        <p style={{ textAlign: "center", fontSize: "12px", color: "#333333", marginTop: "24px" }}>
           GigFlow — Smart Leads Dashboard
         </p>
       </div>

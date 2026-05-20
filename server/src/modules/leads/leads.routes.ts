@@ -8,8 +8,11 @@ const router = Router();
 
 router.use(authenticate);
 
+// ─── These must be BEFORE /:id ────────────────────────────────────────────────
 router.get("/stats", leadsController.getLeadStats);
 router.get("/export", leadsController.exportCSV);
+
+// ─── CRUD ─────────────────────────────────────────────────────────────────────
 router.get("/", leadsController.getLeads);
 router.get("/:id", leadsController.getLeadById);
 router.post("/", validate(createLeadSchema), leadsController.createLead);
