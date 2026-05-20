@@ -54,6 +54,20 @@ Respond with ONLY this JSON (no markdown, no explanation):
       };
     }
   }
+  async bulkAnalyze(leads: any[]): Promise<{ leadId: string; name: string; score: number; suggestion: string }[]> {
+    const results = await Promise.all(
+      leads.map(async (lead) => {
+        const analysis = await this.analyzeLead(lead);
+        return {
+          leadId: lead._id.toString(),
+          name: lead.name,
+          score: analysis.score,
+          suggestion: analysis.suggestion,
+        };
+      })
+    );
+    return results;
+  }
 
   async getDashboardInsights(stats: Record<string, number>): Promise<string> {
     const prompt = `

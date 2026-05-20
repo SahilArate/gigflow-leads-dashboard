@@ -21,4 +21,8 @@ export const aiService = {
     );
     return data.data!.insight;
   },
+  async bulkAnalyze(leadIds: string[]): Promise<any[]> {
+    const { data } = await api.post<ApiResponse<{ results: any[] }>>("/ai/bulk", { leadIds });
+    return data.data!.results;
+  },
 };
