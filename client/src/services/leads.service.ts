@@ -36,15 +36,14 @@ export const leadsService = {
     return data.data!.lead;
   },
   async getChartData(): Promise<{ byStatus: any[]; bySource: any[] }> {
-    const { data } = await api.get<ApiResponse<{ data: { byStatus: any[]; bySource: any[] } }>>("/leads/charts");
-    return data.data!.data;
+    const { data } = await api.get("/leads/charts");
+    return data.data?.data || { byStatus: [], bySource: [] };
   },
 
   async getLeadActivity(id: string): Promise<any[]> {
-    const { data } = await api.get<ApiResponse<{ activity: any[] }>>(`/leads/${id}/activity`);
-    return data.data!.activity || [];
+    const { data } = await api.get(`/leads/${id}/activity`);
+    return data.data?.activity || [];
   },
-
   async updateLead(id: string, payload: Partial<CreateLeadPayload>): Promise<Lead> {
     const { data } = await api.patch<ApiResponse<{ lead: Lead }>>(`/leads/${id}`, payload);
     return data.data!.lead;
