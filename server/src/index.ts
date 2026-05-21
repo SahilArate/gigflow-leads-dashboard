@@ -11,7 +11,11 @@ const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: env.clientUrl,
+  origin: [
+    "http://localhost:3000",
+    "https://gigflow-leads-dashboard-tawny.vercel.app",
+    env.clientUrl,
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
